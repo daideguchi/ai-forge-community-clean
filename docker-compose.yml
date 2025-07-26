@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  # 論文要約 Bot
+  paper-summarizer:
+    build:
+      context: .
+      dockerfile: bots/paper_summarizer/Dockerfile
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ARXIV_RSS_URLS=${ARXIV_RSS_URLS}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - database
+
+  # コードレビュー Bot
+  code-reviewer:
+    build:
+      context: .
+      dockerfile: bots/code_reviewer/Dockerfile
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_REPO_OWNER=${GITHUB_REPO_OWNER}
+      - GITHUB_REPO_NAME=${GITHUB_REPO_NAME}
+    restart: unless-stopped
+    depends_on:
+      - database
+
+  # Human-in-the-Loop Bot
+  human-in-loop:
+    build:
+      context: .
+      dockerfile: bots/human_in_loop/Dockerfile
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - database
+
+  # モデレーター Bot
+  moderator:
+    build:
+      context: .
+      dockerfile: bots/moderator/Dockerfile
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
+      - PERSPECTIVE_API_KEY=${PERSPECTIVE_API_KEY}
+      - TOXICITY_THRESHOLD=${TOXICITY_THRESHOLD}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - database
+
+  # PostgreSQL データベース (本番用)
+  database:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=ai_community
+      - POSTGRES_USER=ai_forge
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  # Redis (キャッシュ・セッション管理用)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # Webhook サーバー (GitHub イベント受信用)
+  webhook-server:
+    build:
+      context: .
+      dockerfile: webhooks/Dockerfile
+    environment:
+      - DISCORD_WEBHOOK_URL=${GITHUB_WEBHOOK_URL}
+      - GITHUB_SECRET=${GITHUB_WEBHOOK_SECRET}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
