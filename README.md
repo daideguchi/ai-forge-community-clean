@@ -93,7 +93,8 @@ python start_paper_bot.py
 
 | ガイド | 内容 | 所要時間 | 推奨度 |
 |--------|------|----------|--------|
-| [⚡ INSTANT_SETUP.md](INSTANT_SETUP.md) | **即座セットアップ（APIキー設定済み）** | **5分** | **推奨** |
+| [⚡ INSTANT_SETUP.md](INSTANT_SETUP.md) | **即座セットアップ** | **5分** | **推奨** |
+| [🔗 MCP_DISCORD_SETUP.md](MCP_DISCORD_SETUP.md) | **Discord MCP連携（AI操作可能）** | **10分** | **推奨** |
 | [✅ COMPLETE_SETUP_CHECKLIST.md](COMPLETE_SETUP_CHECKLIST.md) | 完全チェックリスト | 30分 | 初心者向け |
 | [📖 DISCORD_SETUP.md](DISCORD_SETUP.md) | Discord Bot作成・サーバー設定 | 15分 | 必須 |
 | [🔑 API_KEYS_SETUP.md](API_KEYS_SETUP.md) | 全APIキー取得方法 | 20分 | 自分で設定する場合 |
