@@ -55,7 +55,7 @@ ai-dev-community/
 
 ```bash
 # 1. リポジトリをクローン
-git clone https://github.com/daideguchi/ai-forge-community.git
+git clone https://github.com/daideguchi/ai-forge-community-clean.git
 cd ai-forge-community
 
 # 2. 依存関係をインストール
@@ -101,7 +101,7 @@ python start_paper_bot.py
 
 ## 🌐 リポジトリ
 
-**GitHub**: https://github.com/daideguchi/ai-forge-community
+**GitHub**: https://github.com/daideguchi/ai-forge-community-clean
 
 ## 🎯 2つの選択肢
 
