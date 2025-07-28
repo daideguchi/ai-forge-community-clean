@@ -1,0 +1,1 @@
+web: python bots/multilingual_base_bot.py
